@@ -1,10 +1,17 @@
 #!/bin/bash
 
-#font colors
+# font colors
 RED="\e[31m"
 GREEN="\e[32m"
 YELLOW="\e[33m"
 ENDCOLOR="\e[0m"
+
+# ตรวจสอบสิทธิ์ Root ก่อนทำงาน
+if [ "$EUID" -ne 0 ]; then
+    # ถ้าไม่มีสิทธิ์ root ให้สั่งรันด้วย sudo อัตโนมัติ
+    exec sudo bash "$0" "$@"
+    exit
+fi
 
 clear
 echo -e "          ░█▀▀▀█ ░█▀▀▀█ ░█─── ─█▀▀█ ░█▀▀█ 　 ░█─░█ ░█▀▀▄ ░█▀▀█ " | lolcat
@@ -18,20 +25,25 @@ echo -e "=================================================="
 printf "  %-15s | %-15s | %-10s\n" "ชื่อผู้ใช้" "วันหมดอายุ" "สถานะ"
 echo -e "=================================================="
 
-while read user; do
+while read -r user; do
     user_id=$(id -u "$user" 2>/dev/null)
+    # คัดกรองเอาเฉพาะผู้ใช้ปกติของระบบ (UID 1000 ขึ้นไป)
     if [ "$user_id" -ge 1000 ] && [ "$user" != "nobody" ]; then
-        # ตรวจสอบวันหมดอายุ
-        expire_date=$(chage -l "$user" | grep "Account expires" | cut -d: -f2)
-        if echo "$expire_date" | grep -q "never"; then
+        # ดึงค่าวันหมดอายุจากบัญชีโดยตรงด้วยสิทธิ์ root
+        expire_date=$(chage -l "$user" 2>/dev/null | grep "Account expires" | cut -d: -f2 | xargs)
+        
+        if [ -z "$expire_date" ] || [ "$expire_date" = "never" ] || [ "$expire_date" = "ไม่มี" ]; then
             expire_display="ไม่มีวันหมดอายุ"
             status="${GREEN}ปกติ${ENDCOLOR}"
         else
+            # แปลงรูปแบบวันหมดอายุให้ออกมาเป็น YYYY-MM-DD
             expire_display=$(date -d "$expire_date" "+%Y-%m-%d" 2>/dev/null)
-            # ตรวจสอบว่าหมดอายุหรือยัง
+            
+            # ตรวจสอบระยะเวลาหมดอายุ
             expire_epoch=$(date -d "$expire_date" +%s 2>/dev/null)
             current_epoch=$(date +%s)
-            if [ "$current_epoch" -gt "$expire_epoch" ]; then
+            
+            if [ -n "$expire_epoch" ] && [ "$current_epoch" -gt "$expire_epoch" ]; then
                 status="${RED}หมดอายุ${ENDCOLOR}"
             else
                 status="${GREEN}ปกติ${ENDCOLOR}"
@@ -43,5 +55,5 @@ done < <(cut -d: -f1 /etc/passwd)
 
 echo -e "=================================================="
 echo ""
-echo -e "กด Enter เพื่อกลับไปที่เมนูหลัก"; read
+echo -e "กด Enter เพื่อกลับไปที่เมนูหลัก"; read -r
 menu
