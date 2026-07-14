@@ -4,6 +4,10 @@ echo "==================================================" | lolcat
 echo "                  ★ SSLAB SSH ★                    " | lolcat
 echo "==================================================" | lolcat
 echo ""
+
+# ดึงไอพีของเครื่อง VPS อัตโนมัติ (ไม่ว่าจะรันบนเครื่องไหน)
+MYIP=$(wget -qO- ipinfo.io/ip || curl -s api.ipify.org || echo "IP_NOT_FOUND")
+
 read -p " • ระบุชื่อผู้ใช้งาน : " username
 
 # ตรวจสอบว่ามีผู้ใช้งานนี้อยู่แล้วหรือไม่
@@ -42,6 +46,7 @@ exp_date=$(date -d "$exp" +"%Y-%m-%d")
 
 clear
 echo "==================================================" | lolcat
+echo " • ชื่อผู้ใช้งาน : $username"
 echo " • รหัสผ่าน : $password"
 echo " • วันหมดอายุ : $exp_date"
 echo " • ล็อกอินพร้อมกันสูงสุด : $maxlog"
@@ -51,7 +56,7 @@ echo " • Badvpn    : 1-65535"
 echo ""
 echo "========= Http Custom UDP =========" | lolcat
 echo ""
-echo " 185.84.160.145:1-65535@$username:$password"
+echo " ${MYIP}:1-65535@$username:$password"
 echo ""
 echo "==================================================" | lolcat
 echo " >> ติดต่อบน Telegram : @shaystudiolab"
