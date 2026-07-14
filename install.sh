@@ -1,6 +1,7 @@
 #!/bin/bash
+export DEBIAN_FRONTEND=noninteractive
 apt update -y
-apt upgrade -y
+apt upgrade -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold"
 apt install lolcat -y
 apt install figlet -y
 apt install neofetch -y
@@ -108,7 +109,6 @@ systemctl start udp-custom &>/dev/null
 
 echo enable service udp-custom
 systemctl enable udp-custom &>/dev/null
-
 
 echo reboot
 reboot
