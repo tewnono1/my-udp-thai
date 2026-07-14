@@ -1,0 +1,47 @@
+#!/bin/bash
+
+#font colors
+RED="\e[31m"
+GREEN="\e[32m"
+YELLOW="\e[33m"
+ENDCOLOR="\e[0m"
+
+clear
+echo -e "          ░█▀▀▀█ ░█▀▀▀█ ░█─── ─█▀▀█ ░█▀▀█ 　 ░█─░█ ░█▀▀▄ ░█▀▀█ " | lolcat
+echo -e "          ─▀▀▀▄▄ ─▀▀▀▄▄ ░█─── ░█▄▄█ ░█▀▀▄ 　 ░█─░█ ░█─░█ ░█▄▄█ " | lolcat
+echo -e "          ░█▄▄▄█ ░█▄▄▄█ ░█▄▄█ ░█─░█ ░█▄▄█ 　 ─▀▄▄▀ ░█▄▄▀ ░█─── " | lolcat
+echo ""
+echo ""
+echo -e "=================================================="
+echo -e "           ข้อมูลสถานะผู้ใช้งานในระบบ"
+echo -e "=================================================="
+printf "  %-15s | %-15s | %-10s\n" "ชื่อผู้ใช้" "วันหมดอายุ" "สถานะ"
+echo -e "=================================================="
+
+while read user; do
+    user_id=$(id -u "$user" 2>/dev/null)
+    if [ "$user_id" -ge 1000 ] && [ "$user" != "nobody" ]; then
+        # ตรวจสอบวันหมดอายุ
+        expire_date=$(chage -l "$user" | grep "Account expires" | cut -d: -f2)
+        if echo "$expire_date" | grep -q "never"; then
+            expire_display="ไม่มีวันหมดอายุ"
+            status="${GREEN}ปกติ${ENDCOLOR}"
+        else
+            expire_display=$(date -d "$expire_date" "+%Y-%m-%d" 2>/dev/null)
+            # ตรวจสอบว่าหมดอายุหรือยัง
+            expire_epoch=$(date -d "$expire_date" +%s 2>/dev/null)
+            current_epoch=$(date +%s)
+            if [ "$current_epoch" -gt "$expire_epoch" ]; then
+                status="${RED}หมดอายุ${ENDCOLOR}"
+            else
+                status="${GREEN}ปกติ${ENDCOLOR}"
+            fi
+        fi
+        printf "  %-15s | %-15s | %b\n" "$user" "$expire_display" "$status"
+    fi
+done < <(cut -d: -f1 /etc/passwd)
+
+echo -e "=================================================="
+echo ""
+echo -e "กด Enter เพื่อกลับไปที่เมนูหลัก"; read
+menu
