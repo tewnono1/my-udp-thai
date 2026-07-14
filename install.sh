@@ -1,5 +1,38 @@
 #!/bin/bash
 export DEBIAN_FRONTEND=noninteractive
+
+# ==========================================
+#  ระบบล็อก IP (ระบุ IP ที่อนุญาตให้รันสคริปต์ได้)
+# ==========================================
+# อนุญาตให้เฉพาะ IP เครื่องของคุณรันสคริปต์นี้ได้เท่านั้น
+ALLOWED_IPS="185.84.161.17"
+
+# ดึง IP ปัจจุบันของ VPS เครื่องที่กำลังรันสคริปต์
+MY_IP=$(curl -sS https://ipinfo.io/ip || curl -sS https://api.ipify.org || wget -qO- https://ipv4.icanhazip.com)
+
+# ตรวจสอบสิทธิ์การใช้งาน
+ACCESS_GRANTED=false
+for ip in $ALLOWED_IPS; do
+    if [ "$MY_IP" == "$ip" ]; then
+        ACCESS_GRANTED=true
+        break
+    fi
+done
+
+if [ "$ACCESS_GRANTED" = false ]; then
+    clear
+    echo "=================================================="
+    echo -e " \e[31m⛔ ขออภัย! เซิร์ฟเวอร์นี้ไม่มีสิทธิ์ใช้งานสคริปต์นี้\e[0m"
+    echo "=================================================="
+    echo -e " IP ของเครื่องคุณคือ: \e[33m$MY_IP\e[0m"
+    echo -e " กรุณาติดต่อแอดมินผู้ดูแลเพื่อลงทะเบียน IP นี้"
+    echo "=================================================="
+    exit 1
+fi
+
+# ==========================================
+#  เริ่มขั้นตอนการติดตั้งตามปกติ
+# ==========================================
 apt update -y
 apt upgrade -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold"
 apt install lolcat -y
