@@ -6,31 +6,18 @@ apt install lolcat -y
 apt install figlet -y
 apt install neofetch -y
 apt install screenfetch -y
+apt install unzip -y
 cd
 rm -rf /root/udp
 mkdir -p /root/udp
 
-# banner
-clear
-
-echo -e "          ░█▀▀▀█ ░█▀▀▀█ ░█─── ─█▀▀█ ░█▀▀█   ░█─░█ ░█▀▀▄ ░█▀▀█ " | lolcat
-echo -e "          ─▀▀▀▄▄ ─▀▀▀▄▄ ░█─── ░█▄▄█ ░█▀▀▄   ░█─░█ ░█─░█ ░█▄▄█ " | lolcat
-echo -e "          ░█▄▄▄█ ░█▄▄▄█ ░█▄▄█ ░█─░█ ░█▄▄█   ─▀▄▄▀ ░█▄▄▀ ░█─── " | lolcat
-echo ""
-echo ""
-echo ""
-sleep 5
-
 # change to time GMT+7 Thailand
-echo "change to time GMT+7 Thailand"
 ln -fs /usr/share/zoneinfo/Asia/Bangkok /etc/localtime
 
 # install udp-custom
-echo downloading udp-custom
 wget "https://github.com/tewnono1/my-udp-thai/raw/main/udp-custom-linux-amd64" -O /root/udp/udp-custom
 chmod +x /root/udp/udp-custom
 
-echo downloading default config
 wget "https://raw.githubusercontent.com/tewnono1/my-udp-thai/main/config.json" -O /root/udp/config.json
 chmod 644 /root/udp/config.json
 
@@ -68,46 +55,25 @@ WantedBy=default.target
 EOF
 fi
 
-clear
-echo '    Install Custom UDP Manager   ' | lolcat
-
-echo ''
-echo ''
-echo ''
-sleep 5
-cd $HOME
-mkdir -p /etc/Sslablk
+# โหลดไฟล์สคริปต์ย่อย
+mkdir -p /etc/Sslablk/system
 cd /etc/Sslablk
 wget https://github.com/tewnono1/my-udp-thai/raw/main/system.zip
-unzip system
+unzip -o system
 cd /etc/Sslablk/system
-mv menu /usr/local/bin
-cd /etc/Sslablk/system
-chmod +x ChangeUser.sh
-chmod +x Adduser.sh
-chmod +x DelUser.sh
-chmod +x Userlist.sh
-chmod +x RemoveScript.sh
-chmod +x torrent.sh
-cd /usr/local/bin
-chmod +x menu
-cd /etc/Sslablk
-rm system.zip
+chmod +x ChangeUser.sh Adduser.sh DelUser.sh Userlist.sh RemoveScript.sh torrent.sh
+rm -f /etc/Sslablk/system/menu
+rm -f /etc/Sslablk/system.zip
 
-clear
-echo 'UDP Install Script By Project SSLAB LK Dev.Team'
-echo 'UDP Custom By ePro Dev. Team'
-echo ''
-echo ''
-echo ' Support US'
-echo "Github/tewnono1"
-echo "Telegram/SSLAB LK"
-sleep 5
+# โหลดเมนูภาษาไทยที่เราสร้างขึ้นมาใหม่ไปใช้งานตรง ๆ
+wget "https://raw.githubusercontent.com/tewnono1/my-udp-thai/main/menu" -O /usr/local/bin/menu
+chmod +x /usr/local/bin/menu
+
+# ลิ้งก์คำสั่ง lolcat เผื่อเรียกหาไม่เจอ
+ln -s /usr/games/lolcat /usr/usr/bin/lolcat 2>/dev/null; ln -s /usr/games/lolcat /usr/bin/lolcat 2>/dev/null; ln -s /usr/games/lolcat /usr/local/bin/lolcat 2>/dev/null
 
 echo start service udp-custom
 systemctl start udp-custom &>/dev/null
-
-echo enable service udp-custom
 systemctl enable udp-custom &>/dev/null
 
 echo reboot
