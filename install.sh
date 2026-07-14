@@ -84,11 +84,11 @@ unzip system
 cd /etc/Sslablk/system
 mv menu /usr/local/bin
 cd /etc/Sslablk/system
-chmod +x เปลี่ยนผู้ใช้.sh
-chmod +x เพิ่มผู้ใช้.sh
-chmod +x ลบผู้ใช้.sh
-chmod +x รายชื่อผู้ใช้.sh
-chmod +x ลบสคริปต์.sh
+chmod +x ChangeUser.sh
+chmod +x Adduser.sh
+chmod +x DelUser.sh
+chmod +x Userlist.sh
+chmod +x RemoveScript.sh
 chmod +x torrent.sh
 cd /usr/local/bin
 chmod +x menu
