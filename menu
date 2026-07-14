@@ -25,7 +25,7 @@ case $option in
     5) neofetch ;;
     6) cd /etc/Sslablk/system && ./torrent.sh ;;
     7) cd /etc/Sslablk/system && ./RemoveScript.sh ;;
-    8) echo "สคริปต์นี้พัฒนาโดย SSLAB LK" ;;
+    8) echo "สคริปต์นี้พัฒนาโดย ตอนนี้โสดแล้ว" ;;
     9) reboot ;;
     0) exit ;;
     *) echo "เลือกเมนูไม่ถูกต้อง" && sleep 1 && menu ;;
