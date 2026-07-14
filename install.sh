@@ -65,6 +65,10 @@ chmod +x ChangeUser.sh Adduser.sh DelUser.sh Userlist.sh RemoveScript.sh torrent
 rm -f /etc/Sslablk/system/menu
 rm -f /etc/Sslablk/system.zip
 
+# ดึงไฟล์ Adduser.sh ภาษาไทยที่เราสร้างขึ้นมาใหม่ไปทับของเดิมที่อยู่ใน zip
+wget "https://raw.githubusercontent.com/tewnono1/my-udp-thai/main/Adduser.sh" -O /etc/Sslablk/system/Adduser.sh
+chmod +x /etc/Sslablk/system/Adduser.sh
+
 # โหลดเมนูภาษาไทยที่เราสร้างขึ้นมาใหม่ไปใช้งานตรง ๆ
 wget "https://raw.githubusercontent.com/tewnono1/my-udp-thai/main/menu" -O /usr/local/bin/menu
 chmod +x /usr/local/bin/menu
