@@ -55,21 +55,22 @@ WantedBy=default.target
 EOF
 fi
 
-# โหลดไฟล์สคริปต์ย่อย
+# โหลดไฟล์สคริปต์ย่อย (เปลี่ยนมาดึงแยกทีละไฟล์ ไม่ใช้ไฟล์ซิปแล้ว)
 mkdir -p /etc/Sslablk/system
-cd /etc/Sslablk
-wget https://github.com/tewnono1/my-udp-thai/raw/main/system.zip
-unzip -o system
 cd /etc/Sslablk/system
-chmod +x ChangeUser.sh Adduser.sh DelUser.sh Userlist.sh RemoveScript.sh torrent.sh
-rm -f /etc/Sslablk/system/menu
-rm -f /etc/Sslablk/system.zip
 
-# ดึงไฟล์ Adduser.sh ภาษาไทยที่เราสร้างขึ้นมาใหม่ไปทับของเดิมที่อยู่ใน zip
-wget "https://raw.githubusercontent.com/tewnono1/my-udp-thai/main/Adduser.sh" -O /etc/Sslablk/system/Adduser.sh
-chmod +x /etc/Sslablk/system/Adduser.sh
+wget "https://raw.githubusercontent.com/tewnono1/my-udp-thai/main/ChangeUser.sh" -O ChangeUser.sh
+wget "https://raw.githubusercontent.com/tewnono1/my-udp-thai/main/DelUser.sh" -O DelUser.sh
+wget "https://raw.githubusercontent.com/tewnono1/my-udp-thai/main/Userlist.sh" -O Userlist.sh
+wget "https://raw.githubusercontent.com/tewnono1/my-udp-thai/main/RemoveScript.sh" -O RemoveScript.sh
+wget "https://raw.githubusercontent.com/tewnono1/my-udp-thai/main/torrent.sh" -O torrent.sh
+wget "https://raw.githubusercontent.com/tewnono1/my-udp-thai/main/Adduser.sh" -O Adduser.sh
+wget "https://raw.githubusercontent.com/tewnono1/my-udp-thai/main/infousers" -O infousers
 
-# โหลดเมนูภาษาไทยที่เราสร้างขึ้นมาใหม่ไปใช้งานตรง ๆ
+# เปิดสิทธิ์ให้ไฟล์ทุกตัวในโฟลเดอร์ทำงานได้
+chmod +x *
+
+# โหลดเมนูภาษาไทยไปใช้งานตรง ๆ ในระบบ
 wget "https://raw.githubusercontent.com/tewnono1/my-udp-thai/main/menu" -O /usr/local/bin/menu
 chmod +x /usr/local/bin/menu
 
