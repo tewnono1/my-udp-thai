@@ -7,26 +7,30 @@ echo -e "  1) เพิ่มผู้ใช้งานใหม่"
 echo -e "  2) แสดงผู้ใช้งานทั้งหมด"
 echo -e "  3) แก้ไขข้อมูลผู้ใช้งาน"
 echo -e "  4) ลบผู้ใช้งาน"
-echo -e "  5) ข้อมูลเซิร์ฟเวอร์"
-echo -e "  6) บล็อกบิททอร์เรนต์"
-echo -e "  7) ลบสคริปต์ติดตั้ง"
-echo -e "  8) เกี่ยวกับระบบ"
-echo -e "  9) รีสตาร์ทระบบ"
+echo -e "  5) เช็กสถานะผู้ใช้งาน (วันหมดอายุ)"
+echo -e "  6) เช็กปริมาณเน็ตที่ใช้ (GB)"
+echo -e "  7) ข้อมูลเซิร์ฟเวอร์"
+echo -e "  8) บล็อกบิททอร์เรนต์"
+echo -e "  9) ลบสคริปต์ติดตั้ง"
+echo -e " 10) เกี่ยวกับระบบ"
+echo -e " 11) รีสตาร์ทระบบ"
 echo -e "  0) ออกจากเมนู"
 echo "==================================================" | lolcat
 echo ""
-read -p " • เลือกเมนูที่คุณต้องการใช้งาน [0-9] : " option
+read -p " • เลือกเมนูที่คุณต้องการใช้งาน [0-11] : " option
 
 case $option in
     1) cd /etc/Sslablk/system && ./Adduser.sh ;;
     2) cd /etc/Sslablk/system && ./Userlist.sh ;;
     3) cd /etc/Sslablk/system && ./ChangeUser.sh ;;
     4) cd /etc/Sslablk/system && ./DelUser.sh ;;
-    5) neofetch ;;
-    6) cd /etc/Sslablk/system && ./torrent.sh ;;
-    7) cd /etc/Sslablk/system && ./RemoveScript.sh ;;
-    8) echo "สคริปต์นี้พัฒนาโดย ตอนนี้โสดแล้ว" ;;
-    9) reboot ;;
+    5) cd /etc/Sslablk/system && ./infousers ;;
+    6) cd /etc/Sslablk/system && ./UserUsage.sh ;;
+    7) neofetch ;;
+    8) cd /etc/Sslablk/system && ./torrent.sh ;;
+    9) cd /etc/Sslablk/system && ./RemoveScript.sh ;;
+    10) clear && echo -e "==================================================\n             ★ SSLAB UDP PANEL ★\n==================================================\n\n สคริปต์นี้พัฒนาและปรับปรุงระบบเมนูภาษาไทยโดย: คุณ\n ขอบคุณสำหรับการใช้งานระบบของเราครับ!\n\n==================================================" && echo "" && echo "กด Enter เพื่อกลับไปที่เมนูหลัก" && read && menu ;;
+    11) reboot ;;
     0) exit ;;
     *) echo "เลือกเมนูไม่ถูกต้อง" && sleep 1 && menu ;;
 esac
