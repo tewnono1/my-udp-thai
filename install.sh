@@ -55,7 +55,7 @@ WantedBy=default.target
 EOF
 fi
 
-# โหลดไฟล์สคริปต์ย่อย (เปลี่ยนมาดึงแยกทีละไฟล์ ไม่ใช้ไฟล์ซิปแล้ว)
+# โหลดไฟล์สคริปต์ย่อย
 mkdir -p /etc/Sslablk/system
 cd /etc/Sslablk/system
 
@@ -66,6 +66,7 @@ wget "https://raw.githubusercontent.com/tewnono1/my-udp-thai/main/RemoveScript.s
 wget "https://raw.githubusercontent.com/tewnono1/my-udp-thai/main/torrent.sh" -O torrent.sh
 wget "https://raw.githubusercontent.com/tewnono1/my-udp-thai/main/Adduser.sh" -O Adduser.sh
 wget "https://raw.githubusercontent.com/tewnono1/my-udp-thai/main/infousers" -O infousers
+wget "https://raw.githubusercontent.com/tewnono1/my-udp-thai/main/UserUsage.sh" -O UserUsage.sh
 
 # เปิดสิทธิ์ให้ไฟล์ทุกตัวในโฟลเดอร์ทำงานได้
 chmod +x *
