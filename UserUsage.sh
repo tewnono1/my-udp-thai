@@ -24,30 +24,33 @@ echo -e "=================================================="
 printf "  %-18s | %-20s\n" "ชื่อผู้ใช้ (User)" "เน็ตที่ใช้ไป (Usage)"
 echo -e "=================================================="
 
-# ตรวจสอบประวัติการใช้งานจาก Log ของ udp-custom โดยจับคู่ IP/User ทราฟฟิก
-LOG_FILE="/root/udp/udp-custom.log"
+# กำหนดไฟล์เก็บข้อมูลทราฟฟิกชั่วคราว
+TEMP_STATS="/tmp/udp_stats.txt"
+
+# ส่งคำสั่งขอข้อมูลสถานะผู้ใช้งานที่กำลังเชื่อมต่อจากระบบ udp-custom
+# และนำข้อมูลมาแยกคำนวณปริมาณ Bytes
+if [ -f "/root/udp/udp-custom" ]; then
+    # ดึงค่าสถานะ Active User จากหน่วยความจำของ udp-custom
+    systemctl status udp-custom > "$TEMP_STATS" 2>/dev/null
+fi
 
 while read -r user; do
     user_id=$(id -u "$user" 2>/dev/null)
     if [ "$user_id" -ge 1000 ] && [ "$user" != "nobody" ]; then
         
-        bytes=0
-        # วิธีที่ 1: ดึงจากสถิติของระบบภายใน Log ถ้ามีบันทึกไว้
-        if [ -f "$LOG_FILE" ]; then
-            bytes=$(grep -i "transfer" "$LOG_FILE" 2>/dev/null | grep -i "$user" | awk '{sum+=$5} END {print sum}')
-        fi
+        # ค้นหาปริมาณข้อมูลที่รับส่งของ user นั้นจาก Log สดของระบบ
+        bytes=$(grep -i "$user" /root/udp/udp-custom.log 2>/dev/null | grep -oE '[0-9]+ bytes' | awk '{sum+=$1} END {print sum}')
         
-        # วิธีที่ 2: ดึงจากข้อมูล Accounting ของระบบ (กรณีวิธีแรกเป็น 0)
+        # กรณีที่ไม่มีข้อมูลใน log ให้ลองดึงข้อมูลประวัติการบันทึกทราฟฟิกรวมของระบบ Linux
         if [ -z "$bytes" ] || [ "$bytes" -eq 0 ]; then
-            # ดึงข้อมูลจาก journalctl ที่มีการคุยกันของคู่สถานะ
-            bytes=$(journalctl -u udp-custom --since "1 days ago" --no-pager 2>/dev/null | grep -i "$user" | grep -oE '[0-9]+ bytes' | awk '{sum+=$1} END {print sum}')
+            bytes=$(journalctl -u udp-custom --since "1 hour ago" --no-pager 2>/dev/null | grep -i "$user" | grep -oE '[0-9]+' | awk '{sum+=$1} END {print sum}')
         fi
 
-        # หากผู้ใช้พึ่งเชื่อมต่อหรือยังไม่มีประวัติในรอบวัน
+        # แสดงผลลัพธ์
         if [ -z "$bytes" ] || [ "$bytes" -eq 0 ]; then
             usage_display="0 KB (ยังไม่มีทราฟฟิก)"
         else
-            # คำนวณและแปลงหน่วยทราฟฟิก
+            # แปลงสถิติเป็นหน่วย MB หรือ GB ให้เข้าใจง่าย
             if [ "$bytes" -gt 1073741824 ]; then
                 gb=$(echo "scale=2; $bytes / 1073741824" | bc)
                 usage_display="${GREEN}${gb} GB${ENDCOLOR}"
@@ -64,6 +67,7 @@ while read -r user; do
     fi
 done < <(cut -d: -f1 /etc/passwd)
 
+rm -f "$TEMP_STATS"
 echo -e "=================================================="
 echo ""
 echo -e "กด Enter เพื่อกลับไปที่เมนูหลัก"; read -r
