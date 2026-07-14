@@ -59,8 +59,8 @@ echo ""
 echo " ${MYIP}:1-65535@$username:$password"
 echo ""
 echo "==================================================" | lolcat
-echo " >> ติดต่อบน Telegram : @shaystudiolab"
-echo " >> ติดต่อบน Github : @noobconner21"
+echo " >> ติดต่อบน Telegram : ยังไม่ใช้บริการ"
+echo " >> ติดต่อบน Github : ยังไม่มีใช้บริการ"
 echo "==================================================" | lolcat
 echo ""
 read -p " กดปุ่ม Enter เพื่อกลับสู่เมนูหลัก "
