@@ -5,7 +5,7 @@ export DEBIAN_FRONTEND=noninteractive
 #  ระบบล็อก IP (ระบุ IP ที่อนุญาตให้รันสคริปต์ได้)
 # ==========================================
 # อนุญาตให้เฉพาะ IP เครื่องของคุณรันสคริปต์นี้ได้เท่านั้น
-ALLOWED_IPS="185.84.161.17"
+ALLOWED_IPS="185.84.161.49"
 
 # ดึง IP ปัจจุบันของ VPS เครื่องที่กำลังรันสคริปต์
 MY_IP=$(curl -sS https://ipinfo.io/ip || curl -sS https://api.ipify.org || wget -qO- https://ipv4.icanhazip.com)
