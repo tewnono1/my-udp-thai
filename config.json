@@ -1,7 +1,9 @@
 {
   "listen": ":36712",
-  "stream_buffer": 33554432,
-  "receive_buffer": 83886080,
+  "stream_buffer": 67108864,
+  "receive_buffer": 167772160,
+  "write_buffer": 167772160,
+  "mtu": 1280,
   "auth": {
     "mode": "passwords"
   }
